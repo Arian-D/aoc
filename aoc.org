@@ -3,6 +3,8 @@
 #+startup: fold
 #+description: My inconsistent advent of code solutions in various languages.
 
+If you're looking at this on GitHub, you might wanna know that there's
+a pdf version as well [[https://raw.githubusercontent.com/Arian-D/aoc/export/README.pdf][here]].
 * Day 1
 ** Emacs Lisp
 - There's no built-in =sum= in lisp-land, so we can =apply= the =+= function.
@@ -62,3 +64,6 @@ main = do
   -- Part 2 solution
   print . top3highest $ file
 #+end_src
+
+#  It doesn't look good (yet), but I'll either use minted for syntax
+#  highlighting, or I'll be lazy and use ox-hugo. We'll see
