@@ -3,8 +3,9 @@
 #+startup: fold
 #+description: My inconsistent advent of code solutions in various languages.
 
-If you're looking at this on GitHub, you might wanna know that there's
-a pdf version as well [[https://raw.githubusercontent.com/Arian-D/aoc/export/README.pdf][here]].
+The [[https://raw.githubusercontent.com/Arian-D/aoc/export/README.pdf][PDF version]] is broken at the moment, but I'll fix it soon for
+pwettier output.
+
 * Day 1
 ** Emacs Lisp
 - There's no built-in =sum= in lisp-land, so we can =apply= the =+= function.
