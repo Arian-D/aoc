@@ -1,0 +1,23 @@
+#+title: Advent of Code
+#+description: My inconsistent advent of code solutions in varioues languages
+* Day 1
+** Haskell
+#+begin_src haskell :results output
+  import Data.List (sort)
+  import Data.List.Split (splitOn)
+
+  sortedCalories :: String -> [Int]
+  sortedCalories =
+      (reverse . sort . (map sum) . (map (map read)) . (splitOn [""]) . lines)
+
+  highest = head . sortedCalories
+
+  top3highest = sum . (take 3) . sortedCalories
+
+  main = do
+    file <- readFile "/tmp/input.txt"
+    -- Part 1 solution
+    print . highest $ file
+    -- Part 2 solution
+    print . top3highest $ file
+#+end_src
