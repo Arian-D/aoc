@@ -11,4 +11,5 @@ jobs:
         uses: tecosaur/org-knit-action@v0.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: export
           export: pdf
