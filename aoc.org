@@ -1,7 +1,15 @@
 #+title: Advent of Code
-#+description: My inconsistent advent of code solutions in varioues languages
+#+author: Arian
+#+startup: fold
+#+description: My inconsistent advent of code solutions in various languages.
+
 * Day 1
 ** Emacs Lisp
+- There's no built-in =sum= in lisp-land, so we can =apply= the =+= function.
+- Here, I'm using =apply-partially= to somewhat simulate currying.
+- Although =cl-reduce= requires the =cl= library, it's advantageous over
+  =seq-reduce= because it does not require an initial item, thus making
+  it suitable for =apply-partially=
 #+begin_src emacs-lisp
   (defun sorted-calories (input-file)
     "Read the file and return a sorted list of elf item calories."
@@ -12,7 +20,9 @@
              (list-of-lists (mapcar
                              (lambda (list) (split-string list "\n"))
                              list))
-             (parsed (mapcar (apply-partially #'mapcar #'string-to-number) list-of-lists))
+             (parsed (mapcar (apply-partially #'mapcar
+                                              #'string-to-number)
+                             list-of-lists)) 
              (summed-up (mapcar (apply-partially #'cl-reduce #'+) parsed)))
         (sort summed-up #'>))))
 
@@ -24,6 +34,15 @@
 #+end_src
 
 ** Haskell
+- The function is [[https://wiki.haskell.org/Pointfree][point-free]] and simple compositions.
+- This solution is inefficient because =sort= sorts items in ascending
+  order and I =reverse= them. It gets the job done for this simple
+  problem, but if I needed to make it more efficient I would've used
+  the =sortBy= function instead and used a different =compare= to avoid reversing.
+- I'll only mention it here because it's the first problem, but haskell offers lots of functions that
+  offer richer types like =Maybe= and =Either= to do this in a more
+  error-free manner in cases like parsing integers or reading files,
+  but instead I just went with the ez™ solution.
 #+begin_src haskell :results output
 import Data.List (sort)
 import Data.List.Split (splitOn)
