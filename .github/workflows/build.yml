@@ -4,11 +4,11 @@ on: [push]
 jobs:
   export:
     runs-on: ubuntu-latest
-    - name: Checkout
-      uses: actions/checkout@v2
+    steps:
+      - uses: actions/checkout@v2
 
-    - name: Export org files
-      uses: tecosaur/org-knit-action@v0.3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        export: pdf
+      - name: Export Org files to GitHub Pages
+        uses: tecosaur/org-knit-action@v0.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          export: pdf
