@@ -86,7 +86,43 @@ main = do
 
       print(f"Part 1: {sorted_calories[0]}")
       print(f"Part 2: {sum(sorted_calories[:3])}")
-
 #+end_src
 
+* Day 2
+** Python
+- Imperative verbose solution
+- I figured out I could use modular arithmetic in the 2nd part, but I
+  kept the first part's method (checking against a set of winning
+  tuples) because it's more readable to me
+#+begin_src python
+  with open("inputs/day2.txt", 'r') as f:
+      total = 0
+      real_total = 0
+      for players in f.read().split('\n'):
+          if players == "":
+              continue
+          # Part 1
+          opponent, me = players.split()
+          values = opponent, me
+          if values in {('C', 'X'), ('A', 'Y'), ('B', 'Z')}:
+              total += 6
+          if ord(opponent) - ord('A') == ord(me) - ord('X'):
+              total += 3
+          total += ord(me) - (ord('X') - 1)
 
+          # Part 2
+          choice = me
+          if choice == 'Y': # Draw
+              real_total += ord(opponent) - (ord('A') - 1)
+              real_total += 3
+          elif choice == 'X': # Lose
+              real_total += (((ord(opponent) - ord('A')) - 1) % 3) + 1
+              real_total += 0
+          elif choice == 'Z': # Win
+              real_total += (((ord(opponent) - ord('A')) + 1) % 3) + 1
+              real_total += 6
+      print(f"Part 1: {total}")
+      print(f"Part 2: {real_total}")
+
+
+#+end_src
