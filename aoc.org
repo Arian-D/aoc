@@ -68,3 +68,25 @@ main = do
 
 #  It doesn't look good (yet), but I'll either use minted for syntax
 #  highlighting, or I'll be lazy and use ox-hugo. We'll see
+
+** Python
+- Once again, we're abusing all the functional programming features
+  like =.split=, =map=, and [[https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions][list comprehensions]].
+- =sorted= has a positional argument called =reverse= that lets us sort in
+  descending order. This allows us to use the top of the list.
+- Just like the previous solutions, it is not done in one-pass, making
+  it an inefficient but easy solution.
+#+begin_src python
+  with open("/tmp/input.txt", 'r') as f:
+      sorted_calories = sorted((
+          sum(map(int, elf.split('\n')))
+          for elf in f.read().split("\n\n")
+          if '' not in elf.split('\n')
+      ), reverse=True)
+
+      print(f"Part 1: {sorted_calories[0]}")
+      print(f"Part 2: {sum(sorted_calories[:3])}")
+
+#+end_src
+
+
