@@ -126,3 +126,69 @@ main = do
 
 
 #+end_src
+** C
+- C is perfect for this problem since there's no extra =ord= being used
+  everywhere; C chars could be used in ordinary arithmetic
+***  Part 1
+- =fscanf= allows reading two spaced integers, so I took advantage of
+  that for reading both characters.
+- As per previous solution, I ommited the loss case, becasue it'd be unnecessary
+- If you wanna see the assembly, check [[https://godbolt.org/z/KPz3W9WrP][Godbolt's website]]
+
+#+begin_src C
+  #include <stdio.h>
+
+  int main() {
+    FILE * input = fopen("inputs/day2.txt", "r");
+    char opponent, me;
+    unsigned int total = 0;
+    do {
+      int ret = fscanf(input, "%c %c\n", &opponent, &me);
+      if (opponent - 'A' == me - 'X') // Draw
+        total += 3;
+      else if ((opponent - 'A' + 1) % 3 == me - 'X') // Win
+        total += 6;
+      total += me - 'X' + 1;
+    } while (!feof(input));
+    printf("Part 1: %d\n", total);
+    fclose(input);
+  }
+#+end_src
+*** Part 2
+- Another nice thing with C is that there's switch-case, unlike Python
+  (at least not until [[https://peps.python.org/pep-0636/][recently]])
+- The behavior  of =%= is unlike Python, where negative numbers are in
+  the domain. This requires the use of a simple ternary operator to
+  handle negative cases. (See this [[https://math.stackexchange.com/questions/801962/difference-between-modulus-and-remainder#801988][stackexchange answer]])
+- [[https://godbolt.org/z/8hf8hbc7e][x86-64 assembly]] for the insane
+#+begin_src C
+  #include <stdio.h>
+
+  int main() {
+    FILE * input = fopen("inputs/day2.txt", "r");
+    char opponent, choice;
+    unsigned int total = 0;
+    do {
+      int ret = fscanf(input, "%c %c\n", &opponent, &choice);
+      int me;
+      switch (choice) {
+      case 'X':
+        me = (opponent - 'A' - 1);
+        me = me < 0 ? 3 : me + 1;
+        break;
+      case 'Y':
+        me = opponent - 'A' + 1;
+        total += 3;
+        break;
+      case 'Z':
+        me = ((opponent - 'A' + 1) % 3) + 1;
+        total += 6;
+        break;
+      }
+      total += me;
+    } while (!feof(input));
+    printf("Part 2: %d\n", total);
+    fclose(input);
+  }
+#+end_src
+
