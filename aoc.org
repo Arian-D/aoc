@@ -191,4 +191,55 @@ main = do
     fclose(input);
   }
 #+end_src
+* Day 3
+Another day of awful inefficient solutions 🙂
+** Haskell
+*** Part 1
+- Here we /can/ use =fromEnum= for getting the ASCII value, but =ord= is
+  just simpler
+- One thing to note is that Haskell Strings are just =[Char]=, meaning
+  they're lazy lists with lots of memory overhead (see [[https://wiki.haskell.org/Strings][this]]). This
+  leads =length= going through the whole list in addition to =splitAt=
+- =intersect= finds the intersect of two lists, but since our data is
+  already in tuples, =uncurry= just makes the types fit.
+#+begin_src haskell
+import Data.List (intersect)
+import Data.Char (ord, isLower)
 
+findPriority :: [String] -> [Int]
+findPriority = map $
+  -- Get the priority
+  (\item -> ord item - (if isLower item then (ord 'a') - 1 else (ord 'A') - 27))
+  -- Find the common character
+  . head . uncurry intersect
+  -- Split lines into tuples
+  . \line -> splitAt (length line `div` 2) line
+
+main :: IO ()
+main = readFile "inputs/day3.txt" >>= (print . sum . findPriority . lines)
+#+end_src
+*** Part 2
+- Would you look at that! More imports 🙂
+- Once again, we're =intersect=-ing, but this time it's every 3
+  lines. The Sequence library has got the handy =chunksOf= which will
+  take care of that, but that introduces the (in)convenience of
+  having to deal with sequences; they have more efficient functions,
+  but you now have to deal with type conversion.
+- =><= is the equivalent of =++=, and folding that gives us the
+  badge.
+ #+begin_src haskell
+import Data.List (intersect)
+import Data.Char (ord, isLower)
+import Data.Sequence (chunksOf, fromList, (><))
+import Data.Foldable (toList)
+
+badgeCount :: [String] -> Int
+badgeCount = sum
+  . fmap (\badge ->
+          ord badge - if isLower badge then (ord 'a') - 1 else (ord 'A') - 27)
+  . fmap (head . foldl1 (intersect . toList))
+  . chunksOf 3 . fromList
+
+main :: IO ()
+main = readFile "inputs/day3.txt" >>= (print . badgeCount .  lines)
+  #+end_src
