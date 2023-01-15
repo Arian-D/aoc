@@ -243,3 +243,23 @@ badgeCount = sum
 main :: IO ()
 main = readFile "inputs/day3.txt" >>= (print . badgeCount .  lines)
   #+end_src
+* Day 4
+** TS/JS
+*** Part 1
+#+begin_src typescript :tangle ./aoc.js
+  const fs = require('fs')
+
+  function contains(pair1, pair2) {
+      return (pair1[0] >= pair2[0] && pair1[1] <= pair2[1])
+          || (pair2[0] >= pair1[0] && pair2[1] <= pair1[1])
+  }
+
+  fs.readFile("./inputs/day4.txt", "utf8", (_, data) => {
+      const count =
+          data.split('\n')
+              .map((line) => line.split(',').map((range) => range.split('-').map((num) => parseInt(num))))
+              .filter((range) => range.length == 2 && contains(range[0], range[1]))
+              .length
+      console.log(`Part 1: ${count}`)
+  })
+#+end_src
